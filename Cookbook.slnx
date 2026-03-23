@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="Cookbook/Cookbook.csproj" />
+  <Project Path="Cookbook.Tests/Cookbook.Tests.csproj" />
+</Solution>
