@@ -36,27 +36,7 @@ public sealed class DishServiceCaloriesTests
         Category = ProductCategory.Liquid,
         CookingType = CookingType.ReadyToEat
     };
-
-    /// <summary>
-    /// Equivalence partitioning:
-    /// valid positive gram amounts should always produce formula-based calories.
-    /// </summary>
-    [Theory]
-    [MemberData(nameof(EquivalentValidAmounts))]
-    public async Task CreateAsync_AutoCalories_UsesFormula_ForEquivalentValidInputs(
-        float oatsAmount,
-        float milkAmount,
-        float expectedCalories)
-    {
-        var service = CreateServiceWithProducts(_oats, _milk);
-        var request = CreateDishRequest(oatsAmount, milkAmount);
-
-        var dish = await service.CreateAsync(request, CancellationToken.None);
-
-        Assert.Equal(expectedCalories, dish.Calories, 2);
-        Assert.Equal(expectedCalories, dish.AutoCalculatedNutrition.Calories, 2);
-    }
-
+    
     /// <summary>
     /// Boundary value analysis:
     /// amount of 0 grams is invalid (lower closed boundary).
@@ -105,6 +85,26 @@ public sealed class DishServiceCaloriesTests
         Assert.Equal(expected, dish.Calories, 2);
     }
 
+    /// <summary>
+    /// Equivalence partitioning:
+    /// valid positive gram amounts should always produce formula-based calories.
+    /// </summary>
+    [Theory]
+    [MemberData(nameof(EquivalentValidAmounts))]
+    public async Task CreateAsync_AutoCalories_UsesFormula_ForEquivalentValidInputs(
+        float oatsAmount,
+        float milkAmount,
+        float expectedCalories)
+    {
+        var service = CreateServiceWithProducts(_oats, _milk);
+        var request = CreateDishRequest(oatsAmount, milkAmount);
+
+        var dish = await service.CreateAsync(request, CancellationToken.None);
+
+        Assert.Equal(expectedCalories, dish.Calories, 2);
+        Assert.Equal(expectedCalories, dish.AutoCalculatedNutrition.Calories, 2);
+    }
+    
     /// <summary>
     /// Boundary value analysis:
     /// product with 0 calories should not contribute to resulting calories.
