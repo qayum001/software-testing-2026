@@ -12,19 +12,98 @@
         ],
         "requestBody": {
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
-                "$ref": "#/components/schemas/CreateDishRequest"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateDishRequest"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateDishRequest"
+                "type": "object",
+                "properties": {
+                  "Name": {
+                    "type": "string"
+                  },
+                  "Photos": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "PhotoFiles": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "binary"
+                    }
+                  },
+                  "Calories": {
+                    "type": "number",
+                    "format": "float"
+                  },
+                  "Proteins": {
+                    "type": "number",
+                    "format": "float"
+                  },
+                  "Fats": {
+                    "type": "number",
+                    "format": "float"
+                  },
+                  "Carbs": {
+                    "type": "number",
+                    "format": "float"
+                  },
+                  "Products": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/DishProductRequest"
+                    }
+                  },
+                  "PortionSize": {
+                    "type": "number",
+                    "format": "float"
+                  },
+                  "Category": {
+                    "$ref": "#/components/schemas/DishCategory"
+                  },
+                  "Flags": {
+                    "uniqueItems": true,
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/DietaryFlag"
+                    }
+                  }
+                }
+              },
+              "encoding": {
+                "Name": {
+                  "style": "form"
+                },
+                "Photos": {
+                  "style": "form"
+                },
+                "PhotoFiles": {
+                  "style": "form"
+                },
+                "Calories": {
+                  "style": "form"
+                },
+                "Proteins": {
+                  "style": "form"
+                },
+                "Fats": {
+                  "style": "form"
+                },
+                "Carbs": {
+                  "style": "form"
+                },
+                "Products": {
+                  "style": "form"
+                },
+                "PortionSize": {
+                  "style": "form"
+                },
+                "Category": {
+                  "style": "form"
+                },
+                "Flags": {
+                  "style": "form"
+                }
               }
             }
           }
@@ -202,19 +281,98 @@
         ],
         "requestBody": {
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateDishRequest"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateDishRequest"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateDishRequest"
+                "type": "object",
+                "properties": {
+                  "Name": {
+                    "type": "string"
+                  },
+                  "Photos": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "PhotoFiles": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "binary"
+                    }
+                  },
+                  "Calories": {
+                    "type": "number",
+                    "format": "float"
+                  },
+                  "Proteins": {
+                    "type": "number",
+                    "format": "float"
+                  },
+                  "Fats": {
+                    "type": "number",
+                    "format": "float"
+                  },
+                  "Carbs": {
+                    "type": "number",
+                    "format": "float"
+                  },
+                  "Products": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/DishProductRequest"
+                    }
+                  },
+                  "PortionSize": {
+                    "type": "number",
+                    "format": "float"
+                  },
+                  "Category": {
+                    "$ref": "#/components/schemas/DishCategory"
+                  },
+                  "Flags": {
+                    "uniqueItems": true,
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/DietaryFlag"
+                    }
+                  }
+                }
+              },
+              "encoding": {
+                "Name": {
+                  "style": "form"
+                },
+                "Photos": {
+                  "style": "form"
+                },
+                "PhotoFiles": {
+                  "style": "form"
+                },
+                "Calories": {
+                  "style": "form"
+                },
+                "Proteins": {
+                  "style": "form"
+                },
+                "Fats": {
+                  "style": "form"
+                },
+                "Carbs": {
+                  "style": "form"
+                },
+                "Products": {
+                  "style": "form"
+                },
+                "PortionSize": {
+                  "style": "form"
+                },
+                "Category": {
+                  "style": "form"
+                },
+                "Flags": {
+                  "style": "form"
+                }
               }
             }
           }
@@ -311,19 +469,94 @@
         ],
         "requestBody": {
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
-                "$ref": "#/components/schemas/CreateProductRequest"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateProductRequest"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateProductRequest"
+                "type": "object",
+                "properties": {
+                  "Name": {
+                    "type": "string"
+                  },
+                  "Photos": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "PhotoFiles": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "binary"
+                    }
+                  },
+                  "Calories": {
+                    "type": "number",
+                    "format": "float"
+                  },
+                  "Proteins": {
+                    "type": "number",
+                    "format": "float"
+                  },
+                  "Fats": {
+                    "type": "number",
+                    "format": "float"
+                  },
+                  "Carbs": {
+                    "type": "number",
+                    "format": "float"
+                  },
+                  "Composition": {
+                    "type": "string"
+                  },
+                  "Category": {
+                    "$ref": "#/components/schemas/ProductCategory"
+                  },
+                  "CookingType": {
+                    "$ref": "#/components/schemas/CookingType"
+                  },
+                  "Flags": {
+                    "uniqueItems": true,
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/DietaryFlag"
+                    }
+                  }
+                }
+              },
+              "encoding": {
+                "Name": {
+                  "style": "form"
+                },
+                "Photos": {
+                  "style": "form"
+                },
+                "PhotoFiles": {
+                  "style": "form"
+                },
+                "Calories": {
+                  "style": "form"
+                },
+                "Proteins": {
+                  "style": "form"
+                },
+                "Fats": {
+                  "style": "form"
+                },
+                "Carbs": {
+                  "style": "form"
+                },
+                "Composition": {
+                  "style": "form"
+                },
+                "Category": {
+                  "style": "form"
+                },
+                "CookingType": {
+                  "style": "form"
+                },
+                "Flags": {
+                  "style": "form"
+                }
               }
             }
           }
@@ -522,19 +755,94 @@
         ],
         "requestBody": {
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateProductRequest"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateProductRequest"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateProductRequest"
+                "type": "object",
+                "properties": {
+                  "Name": {
+                    "type": "string"
+                  },
+                  "Photos": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "PhotoFiles": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "binary"
+                    }
+                  },
+                  "Calories": {
+                    "type": "number",
+                    "format": "float"
+                  },
+                  "Proteins": {
+                    "type": "number",
+                    "format": "float"
+                  },
+                  "Fats": {
+                    "type": "number",
+                    "format": "float"
+                  },
+                  "Carbs": {
+                    "type": "number",
+                    "format": "float"
+                  },
+                  "Composition": {
+                    "type": "string"
+                  },
+                  "Category": {
+                    "$ref": "#/components/schemas/ProductCategory"
+                  },
+                  "CookingType": {
+                    "$ref": "#/components/schemas/CookingType"
+                  },
+                  "Flags": {
+                    "uniqueItems": true,
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/DietaryFlag"
+                    }
+                  }
+                }
+              },
+              "encoding": {
+                "Name": {
+                  "style": "form"
+                },
+                "Photos": {
+                  "style": "form"
+                },
+                "PhotoFiles": {
+                  "style": "form"
+                },
+                "Calories": {
+                  "style": "form"
+                },
+                "Proteins": {
+                  "style": "form"
+                },
+                "Fats": {
+                  "style": "form"
+                },
+                "Carbs": {
+                  "style": "form"
+                },
+                "Composition": {
+                  "style": "form"
+                },
+                "Category": {
+                  "style": "form"
+                },
+                "CookingType": {
+                  "style": "form"
+                },
+                "Flags": {
+                  "style": "form"
+                }
               }
             }
           }
@@ -655,116 +963,6 @@
         ],
         "type": "integer",
         "format": "int32"
-      },
-      "CreateDishRequest": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "nullable": true
-          },
-          "photos": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "nullable": true
-          },
-          "calories": {
-            "type": "number",
-            "format": "float",
-            "nullable": true
-          },
-          "proteins": {
-            "type": "number",
-            "format": "float",
-            "nullable": true
-          },
-          "fats": {
-            "type": "number",
-            "format": "float",
-            "nullable": true
-          },
-          "carbs": {
-            "type": "number",
-            "format": "float",
-            "nullable": true
-          },
-          "products": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/DishProductRequest"
-            },
-            "nullable": true
-          },
-          "portionSize": {
-            "type": "number",
-            "format": "float"
-          },
-          "category": {
-            "$ref": "#/components/schemas/DishCategory"
-          },
-          "flags": {
-            "uniqueItems": true,
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/DietaryFlag"
-            },
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "CreateProductRequest": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "nullable": true
-          },
-          "photos": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "nullable": true
-          },
-          "calories": {
-            "type": "number",
-            "format": "float"
-          },
-          "proteins": {
-            "type": "number",
-            "format": "float"
-          },
-          "fats": {
-            "type": "number",
-            "format": "float"
-          },
-          "carbs": {
-            "type": "number",
-            "format": "float"
-          },
-          "composition": {
-            "type": "string",
-            "nullable": true
-          },
-          "category": {
-            "$ref": "#/components/schemas/ProductCategory"
-          },
-          "cookingType": {
-            "$ref": "#/components/schemas/CookingType"
-          },
-          "flags": {
-            "uniqueItems": true,
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/DietaryFlag"
-            },
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
       },
       "DietaryFlag": {
         "enum": [
@@ -1054,116 +1252,6 @@
         ],
         "type": "integer",
         "format": "int32"
-      },
-      "UpdateDishRequest": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "nullable": true
-          },
-          "photos": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "nullable": true
-          },
-          "calories": {
-            "type": "number",
-            "format": "float",
-            "nullable": true
-          },
-          "proteins": {
-            "type": "number",
-            "format": "float",
-            "nullable": true
-          },
-          "fats": {
-            "type": "number",
-            "format": "float",
-            "nullable": true
-          },
-          "carbs": {
-            "type": "number",
-            "format": "float",
-            "nullable": true
-          },
-          "products": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/DishProductRequest"
-            },
-            "nullable": true
-          },
-          "portionSize": {
-            "type": "number",
-            "format": "float"
-          },
-          "category": {
-            "$ref": "#/components/schemas/DishCategory"
-          },
-          "flags": {
-            "uniqueItems": true,
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/DietaryFlag"
-            },
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "UpdateProductRequest": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "nullable": true
-          },
-          "photos": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "nullable": true
-          },
-          "calories": {
-            "type": "number",
-            "format": "float"
-          },
-          "proteins": {
-            "type": "number",
-            "format": "float"
-          },
-          "fats": {
-            "type": "number",
-            "format": "float"
-          },
-          "carbs": {
-            "type": "number",
-            "format": "float"
-          },
-          "composition": {
-            "type": "string",
-            "nullable": true
-          },
-          "category": {
-            "$ref": "#/components/schemas/ProductCategory"
-          },
-          "cookingType": {
-            "$ref": "#/components/schemas/CookingType"
-          },
-          "flags": {
-            "uniqueItems": true,
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/DietaryFlag"
-            },
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
       }
     }
   },

@@ -1,6 +1,7 @@
 using System.Text.Json.Serialization;
 using Cookbook.Application.Interfaces;
 using Cookbook.Application.Services;
+using Cookbook.Infrastructure.Files;
 using Cookbook.Infrastructure.Persistence;
 using Cookbook.Middleware;
 
@@ -24,8 +25,10 @@ builder.Services.ConfigureHttpJsonOptions(options =>
 {
     options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
 });
+builder.Services.Configure<PhotoStorageOptions>(builder.Configuration.GetSection(PhotoStorageOptions.SectionName));
 builder.Services.Configure<StorageOptions>(builder.Configuration.GetSection(StorageOptions.SectionName));
 builder.Services.AddSingleton<ICookbookStore, JsonCookbookStore>();
+builder.Services.AddSingleton<IPhotoStorageService, PhotoStorageService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IDishService, DishService>();
 
@@ -37,6 +40,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseStaticFiles();
 app.UseCors("AllowAll");
 app.UseSwagger(options =>
 {

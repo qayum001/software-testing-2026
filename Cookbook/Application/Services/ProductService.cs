@@ -10,7 +10,7 @@ public sealed class ProductService(ICookbookStore store) : IProductService
 {
     public async Task<ProductResponse> CreateAsync(CreateProductRequest request, CancellationToken cancellationToken)
     {
-        ValidateRequest(
+        var trimmedName = ValidateRequest(
             request.Name,
             request.Photos,
             request.Calories,
@@ -22,7 +22,7 @@ public sealed class ProductService(ICookbookStore store) : IProductService
         var entity = new Product
         {
             Id = Guid.NewGuid(),
-            Name = request.Name.Trim(),
+            Name = trimmedName,
             Photos = request.Photos ?? [],
             Calories = request.Calories,
             Proteins = request.Proteins,
@@ -61,7 +61,7 @@ public sealed class ProductService(ICookbookStore store) : IProductService
 
     public async Task<ProductResponse> UpdateAsync(Guid id, UpdateProductRequest request, CancellationToken cancellationToken)
     {
-        ValidateRequest(
+        var trimmedName = ValidateRequest(
             request.Name,
             request.Photos,
             request.Calories,
@@ -75,7 +75,7 @@ public sealed class ProductService(ICookbookStore store) : IProductService
             throw new EntityNotFoundException($"Product with id '{id}' was not found.");
         }
 
-        existing.Name = request.Name.Trim();
+        existing.Name = trimmedName;
         existing.Photos = request.Photos ?? [];
         existing.Calories = request.Calories;
         existing.Proteins = request.Proteins;
@@ -203,8 +203,8 @@ public sealed class ProductService(ICookbookStore store) : IProductService
         };
     }
 
-    private static void ValidateRequest(
-        string name,
+    private static string ValidateRequest(
+        string? name,
         List<string>? photos,
         float calories,
         float proteins,
@@ -212,7 +212,7 @@ public sealed class ProductService(ICookbookStore store) : IProductService
         float carbs)
     {
         var errors = new Dictionary<string, string[]>();
-        var trimmedName = name.Trim();
+        var trimmedName = name?.Trim() ?? string.Empty;
 
         if (trimmedName.Length < 2)
         {
@@ -230,28 +230,61 @@ public sealed class ProductService(ICookbookStore store) : IProductService
         {
             throw new ValidationException(errors);
         }
+
+        return trimmedName;
     }
 
     private static void ValidateNutrition(Dictionary<string, string[]> errors, float calories, float proteins, float fats, float carbs)
     {
+        ValidateCalories(errors, calories);
+        ValidateMacronutrient(errors, "proteins", "Proteins", proteins);
+        ValidateMacronutrient(errors, "fats", "Fats", fats);
+        ValidateMacronutrient(errors, "carbs", "Carbs", carbs);
+
+        if (float.IsFinite(proteins) &&
+            float.IsFinite(fats) &&
+            float.IsFinite(carbs) &&
+            proteins + fats + carbs > 100f)
+        {
+            errors["nutrition"] = ["The sum of proteins, fats, and carbs per 100 g cannot exceed 100."];
+        }
+    }
+
+    private static void ValidateCalories(Dictionary<string, string[]> errors, float calories)
+    {
+        if (!float.IsFinite(calories))
+        {
+            errors["calories"] = ["Calories must be a finite number."];
+            return;
+        }
+
         if (calories < 0)
         {
             errors["calories"] = ["Calories cannot be negative."];
         }
+    }
 
-        if (proteins < 0)
+    private static void ValidateMacronutrient(
+        Dictionary<string, string[]> errors,
+        string key,
+        string displayName,
+        float value)
+    {
+        if (!float.IsFinite(value))
         {
-            errors["proteins"] = ["Proteins cannot be negative."];
+            errors[key] = [$"{displayName} must be a finite number."];
+            return;
         }
 
-        if (fats < 0)
+        if (value < 0)
         {
-            errors["fats"] = ["Fats cannot be negative."];
+            errors[key] = [$"{displayName} cannot be negative."];
+            return;
         }
 
-        if (carbs < 0)
+        if (value > 100f)
         {
-            errors["carbs"] = ["Carbs cannot be negative."];
+            errors[key] = [$"{displayName} cannot exceed 100 per 100 g."];
         }
     }
 

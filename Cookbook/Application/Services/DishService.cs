@@ -44,6 +44,7 @@ public sealed partial class DishService(ICookbookStore store) : IDishService
             request.Fats,
             request.Carbs,
             autoNutrition,
+            request.PortionSize,
             validationErrors);
 
         if (validationErrors.Count > 0)
@@ -147,6 +148,7 @@ public sealed partial class DishService(ICookbookStore store) : IDishService
             request.Fats,
             request.Carbs,
             autoNutrition,
+            request.PortionSize,
             validationErrors);
 
         if (validationErrors.Count > 0)
@@ -187,7 +189,7 @@ public sealed partial class DishService(ICookbookStore store) : IDishService
         }
     }
 
-    private static ParsedName ParseNameMacro(string name)
+    private static ParsedName ParseNameMacro(string? name)
     {
         var source = name ?? string.Empty;
         var match = MacroRegex().Match(source);
@@ -212,7 +214,7 @@ public sealed partial class DishService(ICookbookStore store) : IDishService
         List<DishProductRequest>? products,
         Dictionary<string, string[]> errors)
     {
-        if (cleanName.Trim().Length < 2)
+        if ((cleanName ?? string.Empty).Trim().Length < 2)
         {
             errors["name"] = ["Dish name must contain at least 2 characters."];
         }
@@ -222,7 +224,11 @@ public sealed partial class DishService(ICookbookStore store) : IDishService
             errors["photos"] = ["Photos count cannot be greater than 5."];
         }
 
-        if (portionSize <= 0)
+        if (!float.IsFinite(portionSize))
+        {
+            errors["portionSize"] = ["Portion size must be a finite number."];
+        }
+        else if (portionSize <= 0)
         {
             errors["portionSize"] = ["Portion size must be greater than 0."];
         }
@@ -243,9 +249,9 @@ public sealed partial class DishService(ICookbookStore store) : IDishService
             return;
         }
 
-        if (products.Any(item => item.Amount <= 0))
+        if (products.Any(item => !float.IsFinite(item.Amount) || item.Amount <= 0))
         {
-            errors["products.amount"] = ["Each product amount must be greater than 0 grams."];
+            errors["products.amount"] = ["Each product amount must be a finite number greater than 0 grams."];
         }
 
         var missingProducts = products
@@ -278,6 +284,7 @@ public sealed partial class DishService(ICookbookStore store) : IDishService
         float? fats,
         float? carbs,
         NutritionValues autoNutrition,
+        float portionSize,
         Dictionary<string, string[]> errors)
     {
         var result = new NutritionValues
@@ -290,53 +297,85 @@ public sealed partial class DishService(ICookbookStore store) : IDishService
 
         if (calories.HasValue)
         {
-            if (calories.Value < 0)
-            {
-                errors["calories"] = ["Calories cannot be negative."];
-            }
-            else
-            {
-                result.Calories = MathF.Round(calories.Value, 2);
-            }
+            result.Calories = MathF.Round(calories.Value, 2);
         }
 
         if (proteins.HasValue)
         {
-            if (proteins.Value < 0)
-            {
-                errors["proteins"] = ["Proteins cannot be negative."];
-            }
-            else
-            {
-                result.Proteins = MathF.Round(proteins.Value, 2);
-            }
+            result.Proteins = MathF.Round(proteins.Value, 2);
         }
 
         if (fats.HasValue)
         {
-            if (fats.Value < 0)
-            {
-                errors["fats"] = ["Fats cannot be negative."];
-            }
-            else
-            {
-                result.Fats = MathF.Round(fats.Value, 2);
-            }
+            result.Fats = MathF.Round(fats.Value, 2);
         }
 
         if (carbs.HasValue)
         {
-            if (carbs.Value < 0)
-            {
-                errors["carbs"] = ["Carbs cannot be negative."];
-            }
-            else
-            {
-                result.Carbs = MathF.Round(carbs.Value, 2);
-            }
+            result.Carbs = MathF.Round(carbs.Value, 2);
         }
 
+        ValidateFinalNutrition(result, portionSize, errors);
         return result;
+    }
+
+    private static void ValidateFinalNutrition(
+        NutritionValues nutrition,
+        float portionSize,
+        Dictionary<string, string[]> errors)
+    {
+        ValidateCalories(errors, nutrition.Calories);
+        ValidateMacronutrient(errors, "proteins", "Proteins", nutrition.Proteins);
+        ValidateMacronutrient(errors, "fats", "Fats", nutrition.Fats);
+        ValidateMacronutrient(errors, "carbs", "Carbs", nutrition.Carbs);
+
+        if (float.IsFinite(portionSize) &&
+            portionSize > 0 &&
+            float.IsFinite(nutrition.Proteins) &&
+            float.IsFinite(nutrition.Fats) &&
+            float.IsFinite(nutrition.Carbs) &&
+            (nutrition.Proteins + nutrition.Fats + nutrition.Carbs) / portionSize * 100f > 100f)
+        {
+            errors["nutrition"] = ["The sum of proteins, fats, and carbs per 100 g cannot exceed 100."];
+        }
+    }
+
+    private static void ValidateCalories(Dictionary<string, string[]> errors, float calories)
+    {
+        if (!float.IsFinite(calories))
+        {
+            errors["calories"] = ["Calories must be a finite number."];
+            return;
+        }
+
+        if (calories < 0)
+        {
+            errors["calories"] = ["Calories cannot be negative."];
+        }
+    }
+
+    private static void ValidateMacronutrient(
+        Dictionary<string, string[]> errors,
+        string key,
+        string displayName,
+        float value)
+    {
+        if (!float.IsFinite(value))
+        {
+            errors[key] = [$"{displayName} must be a finite number."];
+            return;
+        }
+
+        if (value < 0)
+        {
+            errors[key] = [$"{displayName} cannot be negative."];
+            return;
+        }
+
+        if (value > 100f)
+        {
+            errors[key] = [$"{displayName} cannot exceed 100 per portion."];
+        }
     }
 
     private static NutritionValues CalculateNutrition(
@@ -468,7 +507,7 @@ public sealed partial class DishService(ICookbookStore store) : IDishService
     [GeneratedRegex(@"!(десерт|первое|второе|напиток|салат|суп|перекус)", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)]
     private static partial Regex MacroRegex();
 
-    [GeneratedRegex("\\s{2,}")]
+    [GeneratedRegex(@"\s{2,}")]
     private static partial Regex ExtraSpacesRegex();
 
     private sealed record ParsedName(string CleanName, DishCategory? MacroCategory);

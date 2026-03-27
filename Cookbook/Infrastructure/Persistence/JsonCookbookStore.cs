@@ -243,6 +243,8 @@ public sealed class JsonCookbookStore : ICookbookStore
 
     private async Task SaveAsync(CookbookDataFile data, CancellationToken cancellationToken)
     {
+        Normalize(data);
+
         var directory = Path.GetDirectoryName(_filePath);
         if (!string.IsNullOrWhiteSpace(directory))
         {
@@ -260,16 +262,45 @@ public sealed class JsonCookbookStore : ICookbookStore
 
         foreach (var product in data.Products)
         {
-            product.Photos ??= [];
+            product.Photos = NormalizePhotos(product.Photos);
             product.Flags ??= [];
         }
 
         foreach (var dish in data.Dishes)
         {
-            dish.Photos ??= [];
+            dish.Photos = NormalizePhotos(dish.Photos);
             dish.Flags ??= [];
             dish.Products ??= [];
         }
+    }
+
+    private static List<string> NormalizePhotos(List<string>? photos)
+    {
+        if (photos is null)
+        {
+            return [];
+        }
+
+        return photos
+            .Where(path => !string.IsNullOrWhiteSpace(path))
+            .Select(NormalizePhotoPath)
+            .ToList();
+    }
+
+    private static string NormalizePhotoPath(string path)
+    {
+        var trimmed = path.Trim().Replace('\\', '/');
+        if (trimmed.Length == 0)
+        {
+            return trimmed;
+        }
+
+        if (Uri.TryCreate(trimmed, UriKind.Absolute, out _))
+        {
+            return trimmed;
+        }
+
+        return trimmed.StartsWith('/') ? trimmed : $"/{trimmed}";
     }
 
     private static Product CloneProduct(Product source)
