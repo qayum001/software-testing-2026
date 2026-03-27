@@ -39,7 +39,6 @@ public sealed class DishServiceCaloriesTests
         CookingType = CookingType.ReadyToEat
     };
     
-    // KEEP: minimal boundary-value test for the lower invalid boundary.
     /// <summary>
     /// Boundary value analysis:
     /// amount of 0 grams is invalid (lower closed boundary).
@@ -56,8 +55,7 @@ public sealed class DishServiceCaloriesTests
 
         Assert.Contains("products.amount", exception.Errors.Keys);
     }
-
-    // KEEP: minimal boundary-value test for data below the allowed lower boundary.
+    
     /// <summary>
     /// Boundary value analysis:
     /// amount below zero is invalid (outside lower boundary).
@@ -74,8 +72,7 @@ public sealed class DishServiceCaloriesTests
 
         Assert.Contains("products.amount", exception.Errors.Keys);
     }
-
-    // KEEP: minimal boundary-value test for the first valid value above zero.
+    
     /// <summary>
     /// Boundary value analysis:
     /// minimum positive amount just above zero is valid.
@@ -92,8 +89,7 @@ public sealed class DishServiceCaloriesTests
         var expected = MathF.Round(350f * 0.01f / 100f + 60f * 100f / 100f, 2);
         Assert.Equal(expected, dish.Calories, 2);
     }
-
-    // KEEP: minimal equivalence-partitioning test for ordinary valid inputs.
+    
     /// <summary>
     /// Equivalence partitioning:
     /// representative valid ingredient amounts should produce calories strictly by the formula from the TZ.
@@ -115,7 +111,6 @@ public sealed class DishServiceCaloriesTests
         Assert.Equal(expectedCalories, dish.AutoCalculatedNutrition.Calories, 2);
     }
     
-    // KEEP: minimal equivalence-partitioning test for a valid zero-calorie product class.
     /// <summary>
     /// Equivalence partitioning:
     /// a product with zero calories is still a valid input class and must contribute 0 to the resulting dish calories.
