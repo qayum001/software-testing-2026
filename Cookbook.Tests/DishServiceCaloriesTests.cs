@@ -8,11 +8,6 @@ using Xunit;
 
 namespace Cookbook.Tests;
 
-/// <summary>
-/// Unit-tests for automatic dish calories calculation.
-/// Comments in this file mark which tests should be kept for the minimum assignment scope
-/// and which ones are extra relative to the current TZ wording.
-/// </summary>
 public sealed class DishServiceCaloriesTests
 {
     private readonly Product _oats = new()
@@ -42,7 +37,6 @@ public sealed class DishServiceCaloriesTests
     /// <summary>
     /// Boundary value analysis:
     /// amount of 0 grams is invalid (lower closed boundary).
-    /// This test should stay because calorie auto-calculation must reject non-positive ingredient amounts.
     /// </summary>
     [Fact]
     public async Task CreateAsync_AutoCalories_ThrowsValidation_WhenAmountIsZero()
@@ -59,7 +53,6 @@ public sealed class DishServiceCaloriesTests
     /// <summary>
     /// Boundary value analysis:
     /// amount below zero is invalid (outside lower boundary).
-    /// This test should stay because it checks the invalid equivalence class before calculation starts.
     /// </summary>
     [Fact]
     public async Task CreateAsync_AutoCalories_ThrowsValidation_WhenAmountIsNegative()
@@ -76,7 +69,6 @@ public sealed class DishServiceCaloriesTests
     /// <summary>
     /// Boundary value analysis:
     /// minimum positive amount just above zero is valid.
-    /// This test should stay because it proves that auto-calculation works on the valid side of the boundary.
     /// </summary>
     [Fact]
     public async Task CreateAsync_AutoCalories_Calculates_WhenAmountIsMinimumPositive()
@@ -92,8 +84,7 @@ public sealed class DishServiceCaloriesTests
     
     /// <summary>
     /// Equivalence partitioning:
-    /// representative valid ingredient amounts should produce calories strictly by the formula from the TZ.
-    /// This docstring was missing and should be kept because the assignment explicitly asks to document test design.
+    /// representative valid ingredient amounts should produce calories strictly by the formula from the requirements.
     /// </summary>
     [Theory]
     [MemberData(nameof(EquivalentValidAmounts))]
@@ -114,7 +105,6 @@ public sealed class DishServiceCaloriesTests
     /// <summary>
     /// Equivalence partitioning:
     /// a product with zero calories is still a valid input class and must contribute 0 to the resulting dish calories.
-    /// This docstring was missing and should be kept because it documents why this scenario belongs to the calculation suite.
     /// </summary>
     [Fact]
     public async Task CreateAsync_AutoCalories_HandlesZeroCaloriesProduct()
