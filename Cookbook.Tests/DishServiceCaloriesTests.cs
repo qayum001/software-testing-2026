@@ -101,6 +101,30 @@ public sealed class DishServiceCaloriesTests
         Assert.Equal(expectedCalories, dish.Calories, 2);
         Assert.Equal(expectedCalories, dish.AutoCalculatedNutrition.Calories, 2);
     }
+
+    /// <summary>
+    /// Equivalence partitioning:
+    /// extremely large but finite amounts are accepted as input values, yet the current implementation
+    /// overflows or violates nutrition constraints and therefore returns validation errors.
+    /// </summary>
+    [Theory]
+    [MemberData(nameof(EquivalentAmountsWithMaxValue))]
+    public async Task CreateAsync_AutoCalories_ThrowsValidation_ForMaxValueInputs(
+        float oatsAmount,
+        float milkAmount,
+        params string[] expectedErrorKeys)
+    {
+        var service = CreateServiceWithProducts(_oats, _milk);
+        var request = CreateDishRequest(oatsAmount, milkAmount);
+
+        var exception = await Assert.ThrowsAsync<ValidationException>(() =>
+            service.CreateAsync(request, CancellationToken.None));
+
+        foreach (var expectedErrorKey in expectedErrorKeys)
+        {
+            Assert.Contains(expectedErrorKey, exception.Errors.Keys);
+        }
+    }
     
     /// <summary>
     /// Equivalence partitioning:
@@ -143,6 +167,13 @@ public sealed class DishServiceCaloriesTests
         yield return [100f, 100f, 410f];
         yield return [50f, 150f, 265f];
         yield return [80f, 120f, 352f];
+    }
+
+    public static IEnumerable<object[]> EquivalentAmountsWithMaxValue()
+    {
+        yield return [float.MaxValue, 100f, new[] { "calories", "proteins", "fats", "carbs", "nutrition" }];
+        yield return [50f, float.MaxValue, new[] { "proteins", "fats", "carbs", "nutrition" }];
+        yield return [float.MaxValue, float.MaxValue, new[] { "calories", "proteins", "fats", "carbs", "nutrition" }];
     }
 
     private static DishService CreateServiceWithProducts(params Product[] products)

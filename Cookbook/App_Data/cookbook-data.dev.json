@@ -292,14 +292,10 @@
       "Carbs": 20,
       "Composition": "Cooked canned lentils.",
       "Category": "Canned",
-      "CookingType": "ReadyToEat",
-      "Flags": [
-        "Vegan",
-        "GlutenFree",
-        "SugarFree"
-      ],
+      "CookingType": "RequiresCooking",
+      "Flags": [],
       "CreatedAt": "2026-03-23T06:14:00+00:00",
-      "UpdatedAt": null
+      "UpdatedAt": "2026-03-27T11:38:45.2326942+00:00"
     },
     {
       "Id": "12121212-1212-1212-1212-121212121212",
@@ -564,6 +560,27 @@
       ],
       "CreatedAt": "2026-03-27T09:22:09.1481387+00:00",
       "UpdatedAt": "2026-03-27T09:27:12.5314108+00:00"
+    },
+    {
+      "Id": "e2db3e81-12f4-4be0-a727-0824483d447a",
+      "Name": "\u043A\u0430\u043F\u0443\u0441\u0442\u0430",
+      "Photos": [
+        "/uploads/products/42204cc2d6c74392af8e0578857a616d.jpg"
+      ],
+      "Calories": 150,
+      "Proteins": 0,
+      "Fats": 0,
+      "Carbs": 15,
+      "Composition": "\u043A\u0430\u043F\u0443\u0441\u0442\u0430",
+      "Category": "Vegetables",
+      "CookingType": "ReadyToEat",
+      "Flags": [
+        "Vegan",
+        "GlutenFree",
+        "SugarFree"
+      ],
+      "CreatedAt": "2026-03-27T11:32:31.2346169+00:00",
+      "UpdatedAt": null
     }
   ],
   "Dishes": [
@@ -1225,6 +1242,83 @@
       ],
       "CreatedAt": "2026-03-27T09:33:58.909503+00:00",
       "UpdatedAt": "2026-03-27T09:38:48.5963864+00:00"
+    },
+    {
+      "Id": "8b4dd524-a7b2-420a-804f-c6437d58caa1",
+      "Name": "\u0449\u0438 \u0432\u0435\u0433\u0430\u043D\u0441\u043A\u0438\u0435",
+      "Photos": [
+        "/uploads/dishes/d9f580ff221d4bcbbeaa02956062c5c4.jpg",
+        "/uploads/dishes/0bd7ff50be5d45d2bef18b17354411e4.jpg",
+        "/uploads/dishes/7098f67a52ac43eb9dc6a535526aecbe.jpg",
+        "/uploads/dishes/66361cfeef974570a01848eda283aba4.jpg"
+      ],
+      "Calories": 117.56,
+      "Proteins": 0.64,
+      "Fats": 0.09,
+      "Carbs": 12.04,
+      "PortionSize": 250,
+      "Category": "Soup",
+      "Flags": [
+        "Vegan",
+        "GlutenFree",
+        "SugarFree"
+      ],
+      "Products": [
+        {
+          "ProductId": "c0715592-4bba-4d28-b52b-f3af4d342645",
+          "Amount": 150
+        },
+        {
+          "ProductId": "e2db3e81-12f4-4be0-a727-0824483d447a",
+          "Amount": 75
+        },
+        {
+          "ProductId": "18181818-1818-1818-1818-181818181818",
+          "Amount": 3
+        },
+        {
+          "ProductId": "88888888-8888-8888-8888-888888888888",
+          "Amount": 22
+        }
+      ],
+      "CreatedAt": "2026-03-27T11:35:40.4595092+00:00",
+      "UpdatedAt": "2026-03-27T11:36:12.4753328+00:00"
+    },
+    {
+      "Id": "d9593da8-6e7a-434c-85a5-9b22a9fb3782",
+      "Name": "\u0449\u0438 \u0441 \u043C\u044F\u0441\u043E\u043C",
+      "Photos": [
+        "/uploads/dishes/186eb4c0dd9947ddb14e16dc0ff295cb.jpg"
+      ],
+      "Calories": 109,
+      "Proteins": 1,
+      "Fats": 0.2,
+      "Carbs": 15.55,
+      "PortionSize": 300,
+      "Category": "Soup",
+      "Flags": [
+        "SugarFree"
+      ],
+      "Products": [
+        {
+          "ProductId": "c0715592-4bba-4d28-b52b-f3af4d342645",
+          "Amount": 150
+        },
+        {
+          "ProductId": "55555555-5555-5555-5555-555555555555",
+          "Amount": 50
+        },
+        {
+          "ProductId": "e2db3e81-12f4-4be0-a727-0824483d447a",
+          "Amount": 47
+        },
+        {
+          "ProductId": "18181818-1818-1818-1818-181818181818",
+          "Amount": 3
+        }
+      ],
+      "CreatedAt": "2026-03-27T11:42:24.1748152+00:00",
+      "UpdatedAt": "2026-03-27T11:43:02.8936704+00:00"
     }
   ]
 }
