@@ -78,7 +78,7 @@ public sealed class DishesApiCrudTests : IAsyncLifetime
         _factory.Dispose();
         return Task.CompletedTask;
     }
-    // TODO: добавить summary
+
     [Fact]
     public async Task CreateDish_PersistsAndReturnsCreatedEntity()
     {
@@ -97,7 +97,12 @@ public sealed class DishesApiCrudTests : IAsyncLifetime
         Assert.NotNull(created);
         Assert.Equal("Tofu pilaf", created!.Name);
         Assert.Equal(250f, created.PortionSize, 2);
-        
+        Assert.Equal(DishCategory.SecondCourse, created.Category);
+        Assert.Contains("/images/pilaf.jpg", created.Photos);
+        Assert.Contains(DietaryFlag.Vegan, created.Flags);
+        Assert.Equal(398f, created.AutoCalculatedNutrition.Calories, 2);
+        Assert.Equal(created.AutoCalculatedNutrition.Calories, created.Calories, 2);
+
         var persisted = await _client.GetFromJsonAsync<DishResponse>($"/api/dishes/{created.Id}");
         Assert.NotNull(persisted);
         Assert.Equal(created.Id, persisted!.Id);
@@ -105,7 +110,7 @@ public sealed class DishesApiCrudTests : IAsyncLifetime
     }
     
     [Fact]
-    public async Task GetDishById_ReturnsExistingDish()
+    public async Task GetDishById_ReturnsSeededDish()
     {
         var response = await _client.GetAsync($"/api/dishes/{_seedDishId}");
 
@@ -114,6 +119,8 @@ public sealed class DishesApiCrudTests : IAsyncLifetime
         Assert.NotNull(dish);
         Assert.Equal(_seedDishId, dish!.Id);
         Assert.Equal("Rice bowl", dish.Name);
+        Assert.Equal(2, dish.Products.Count);
+        Assert.Contains(dish.Products, product => product.ProductId == _riceId && product.ProductName == "Rice");
     }
 
     [Fact]
@@ -141,6 +148,13 @@ public sealed class DishesApiCrudTests : IAsyncLifetime
         Assert.NotNull(updated);
         Assert.Equal(created.Id, updated!.Id);
         Assert.Equal("Rice with tofu", updated.Name);
+        Assert.Equal(260f, updated.PortionSize, 2);
+        Assert.Equal(DishCategory.Snack, updated.Category);
+        Assert.Equal(["/images/rice-tofu.jpg"], updated.Photos);
+        Assert.Equal(492.8f, updated.AutoCalculatedNutrition.Calories, 2);
+        Assert.Contains(DietaryFlag.Vegan, updated.Flags);
+        Assert.Contains(DietaryFlag.GlutenFree, updated.AvailableFlags);
+        Assert.NotNull(updated.UpdatedAt);
 
         var persisted = await _client.GetFromJsonAsync<DishResponse>($"/api/dishes/{created.Id}");
         Assert.NotNull(persisted);

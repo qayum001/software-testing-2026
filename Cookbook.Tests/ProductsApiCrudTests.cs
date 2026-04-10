@@ -102,12 +102,18 @@ public sealed class ProductsApiCrudTests : IAsyncLifetime
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
         var created = await response.Content.ReadFromJsonAsync<ProductResponse>();
         Assert.NotNull(created);
-        Assert.Equal("Apple", created.Name);
+        Assert.Equal("Apple", created!.Name);
+        Assert.Equal(52f, created.Calories, 2);
         Assert.Equal("Fresh fruit", created.Composition);
+        Assert.Contains("/images/apple.jpg", created.Photos);
+        Assert.Contains(DietaryFlag.Vegan, created.Flags);
+        Assert.Contains(DietaryFlag.GlutenFree, created.Flags);
+        Assert.NotEqual(Guid.Empty, created.Id);
+        Assert.NotEqual(default, created.CreatedAt);
 
         var persisted = await _client.GetFromJsonAsync<ProductResponse>($"/api/products/{created.Id}");
         Assert.NotNull(persisted);
-        Assert.Equal(created.Id, persisted.Id);
+        Assert.Equal(created.Id, persisted!.Id);
         Assert.Equal("Apple", persisted.Name);
     }
     
@@ -158,11 +164,19 @@ public sealed class ProductsApiCrudTests : IAsyncLifetime
         Assert.NotNull(updated);
         Assert.Equal(created.Id, updated!.Id);
         Assert.Equal("Baked pumpkin", updated.Name);
+        Assert.Equal(40f, updated.Calories, 2);
+        Assert.Equal("Updated", updated.Composition);
+        Assert.Equal(CookingType.RequiresCooking, updated.CookingType);
+        Assert.Equal(["/images/pumpkin-updated.jpg"], updated.Photos);
+        Assert.Contains(DietaryFlag.GlutenFree, updated.Flags);
+        Assert.DoesNotContain(DietaryFlag.Vegan, updated.Flags);
+        Assert.NotNull(updated.UpdatedAt);
 
         var persisted = await _client.GetFromJsonAsync<ProductResponse>($"/api/products/{created.Id}");
         Assert.NotNull(persisted);
         Assert.Equal("Baked pumpkin", persisted!.Name);
         Assert.Equal("Updated", persisted.Composition);
+        Assert.Equal(CookingType.RequiresCooking, persisted.CookingType);
     }
 
     [Fact]
