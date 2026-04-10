@@ -71,6 +71,6 @@ public sealed class ApiExceptionMiddleware(RequestDelegate next, IHostEnvironmen
     {
         context.Response.StatusCode = statusCode;
         context.Response.ContentType = "application/problem+json";
-        await JsonSerializer.SerializeAsync(context.Response.Body, details, JsonOptions);
+        await JsonSerializer.SerializeAsync(context.Response.Body, details, details.GetType(), JsonOptions);
     }
 }
